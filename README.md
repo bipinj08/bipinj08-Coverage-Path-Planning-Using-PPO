@@ -9,34 +9,22 @@ py## Table of contents
 
 ## Introduction
 
-This repository contains an implementation of the double deep Q-learning (DDQN) approach to control a UAV on a coverage path planning or data harvesting from IoT sensors mission, including global-local map processing. The corresponding paper ["UAV Path Planning using Global and Local Map Information with Deep Reinforcement Learning"](https://ieeexplore.ieee.org/abstract/document/9659413) is available on IEEEXplore. A multi-agent version of the Data Harvesting can be found in ["uav_data_harvesting"](https://github.com/hbayerlein/uav_data_harvesting).
-
-For questions, please contact Mirco Theile via email mirco.theile@tum.de. Please also note that due to github's new naming convention, the 'master' branch is now called 'main' branch.
+This repository contains an implementation of the Proximal Policy Optimization(PPO) approach to control a UAV on a coverage path planning including global-local map processing. The corresponding paper where DDQN is implemented ["UAV Path Planning using Global and Local Map Information with Deep Reinforcement Learning"](https://ieeexplore.ieee.org/abstract/document/9659413) is available on IEEEXplore. This repo also contains the files for data harvesting for IOT devices but it's not implemented using PPO. This project uses the custom environment created by the sources mentioned in the above link. The implementation of the PPO algorithm is to test how the PPO algorithm performs in the environment which is tested by the DDQN algorithm. The original paper of this project can be found here. ([Link to the paper](https://github.com/bipinj08/Papers.git))
 
 
 ## Requirements
-
-```
-python==3.7 or newer
-numpy==1.18.5 or newer
-keras==2.4.3 or newer
-tensorflow==2.5.0 or newer
-matplotlib==3.3.0 or newer
-scikit-image==0.16.2 or newer
-tqdm==4.45.0 or newer
-```
-Developed and tested only on Linux-based systems. In principle, it should also run on Windows, but there might be some compatibility issues.
+The requirement.txt file is created inside the repository which can be used to create the environment for this project.
 
 ## How to use
 
-Train a new DDQN model with the parameters of your choice in the specified config file for Coverage Path Planning (CPP) or Data Harvesting (DH):
+Train a new PPO model with the parameters of your choice in the specified config file for Coverage Path Planning (CPP):
 
 ```
 python main.py --cpp --gpu --config config/manhattan32_cpp.json --id manhattan32_cpp
-python main.py --dh --gpu --config config/manhattan32_dh.json --id manhattan32_dh
 
---cpp|--dh                  Activates CPP or DH
---gpu                       Activates GPU acceleration for DDQN training
+
+--cpp                  Activates CPP
+--gpu                       Activates GPU acceleration for PPO training
 --config                    Path to config file in json format
 --id                        Overrides standard name for logfiles and model
 --generate_config           Enable only to write default config from default values in the code
@@ -44,27 +32,12 @@ python main.py --dh --gpu --config config/manhattan32_dh.json --id manhattan32_d
 
 Evaluate a model through Monte Carlo analysis over the random parameter space for the performance indicators 'Successful Landing', 'Collection Ratio', 'Collection Ratio and Landed' as defined in the paper (plus 'Boundary Counter' counting safety controller activations), e.g. for 1000 Monte Carlo iterations:
 
-```
-
-
-python main_mc.py --dh --weights example/models/manhattan32_dh --config config/manhattan32_dh.json --id manhattan32_dh_mc --samples 1000
-
---cpp|--dh                  Activates CPP or DH
---weights                   Path to weights of trained model
---config                    Path to config file in json format
---id                        Name for exported files
---samples                   Number of Monte Carlo  over random scenario parameters
---seed                      Seed for repeatability
---show                      Pass '--show True' for individual plots of scenarios and allow plot saving
-```
 
 For an example run of pretrained agents the following commands can be used:
 ```
 python main_scenario.py --cpp --config config/manhattan32_cpp.json --weights example/models/manhattan32_cpp --scenario example/scenarios/manhattan_cpp.json --video
 python main_scenario.py --cpp --config config/urban50_cpp.json --weights example/models/urban50_cpp --scenario example/scenarios/urban_cpp.json --video
 
-python main_scenario.py --dh --config config/manhattan32_dh.json --weights example/models/manhattan32_dh --scenario example/scenarios/manhattan_dh.json --video
-python main_scenario.py --dh --config config/urban50_dh.json --weights example/models/urban50_dh --scenario example/scenarios/urban_dh.json --video
 ```
 
 ## Resources
@@ -97,21 +70,6 @@ If using this code for research purposes, please cite:
 }
 ```
 
-for the (multi-agent) Data Harvesting paper:
-
-[2] H. Bayerlein, M. Theile, M. Caccamo, and D. Gesbert, “Multi-UAV path planning for wireless data harvesting with deep reinforcement learning," IEEE Open Journal of the Communications Society, vol. 2, pp. 1171-1187, 2021.
-
-```
-@article{bayerlein2021multi,
-  title={Multi-uav path planning for wireless data harvesting with deep reinforcement learning},
-  author={Bayerlein, Harald and Theile, Mirco and Caccamo, Marco and Gesbert, David},
-  journal={IEEE Open Journal of the Communications Society},
-  volume={2},
-  pages={1171--1187},
-  year={2021},
-  publisher={IEEE}
-}
-```
 
 
 
